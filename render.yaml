@@ -2,7 +2,7 @@ services:
   - type: web
     name: medo-mbbs
     runtime: python
-    buildCommand: "python3 database.py"
+    buildCommand: "pip install -r requirements.txt && python3 database.py"
     startCommand: "python3 server.py"
     plan: free
     autoDeploy: true
