@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Medo — The MBBS Student Medical Blog & High-Yield Notes Hub</title>
+  <meta name="description" content="Medo is a modern medical student publication featuring high-yield study notes, clinical ward survival pearls, Anki setups, and university exam preparation guides.">
+  <meta name="keywords" content="medo, mbbs, medical student, medical notes, anatomy, physiology, pharmacology, pathology, internal medicine, surgery, anki, neet pg, usmle">
+  <meta property="og:title" content="Medo — MBBS Student Blog & Study Notes">
+  <meta property="og:description" content="High-yield medical study notes, clinical pearls, and survival guides for medical students.">
+  <meta property="og:type" content="website">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            teal: {
+              50: '#f0fdfa',
+              100: '#ccfbf1',
+              200: '#99f6e4',
+              300: '#5eead4',
+              400: '#2dd4bf',
+              500: '#14b8a6',
+              600: '#0d9488',
+              700: '#0f766e',
+              800: '#115e59',
+              900: '#134e4a',
+              950: '#042f2e',
+            },
+            indigo: {
+              50: '#eef2ff',
+              100: '#e0e7ff',
+              200: '#c7d2fe',
+              300: '#a5b4fc',
+              400: '#818cf8',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+              800: '#3730a3',
+              900: '#312e81',
+              950: '#1e1b4b',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Highlight.js for Syntax Highlighting -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
+  <!-- Marked.js for Markdown Rendering -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body class="bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 min-h-screen flex flex-col antialiased selection:bg-teal-500 selection:text-white transition-colors duration-200">
+
+  <!-- Reading Progress Bar -->
+  <div id="reading-progress-bar"></div>
+
+  <!-- Global Toast Notification Container -->
+  <div id="toast-container"></div>
+
+  <!-- Global Search Modal -->
+  <div id="search-modal" class="hidden fixed inset-0 z-50 overflow-y-auto bg-slate-950/60 backdrop-blur-sm flex items-start justify-center p-4 sm:p-6 lg:p-20 animate-fade-in">
+    <div class="relative w-full max-w-2xl bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-100 dark:border-slate-800 overflow-hidden" onclick="event.stopPropagation()">
+      <div class="flex items-center px-6 py-4 border-b border-slate-100 dark:border-slate-800 gap-3">
+        <i data-lucide="search" class="w-5 h-5 text-teal-600 dark:text-teal-400"></i>
+        <input type="text" id="modal-search-input" placeholder="Search notes, clinical pearls, drugs, anatomy..." oninput="App.performModalSearch(this.value)" class="w-full bg-transparent text-sm sm:text-base text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none">
+        <span class="px-2 py-0.5 text-[11px] font-mono font-semibold bg-slate-100 dark:bg-slate-800 text-slate-500 rounded-lg">ESC</span>
+        <button onclick="App.closeSearchModal()" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      <div id="modal-search-results" class="p-4 max-h-[60vh] overflow-y-auto space-y-1">
+        <div class="py-12 text-center text-slate-400 text-sm">
+          Type to search medical blogs & high-yield notes...
+        </div>
+      </div>
+      <div class="p-3 bg-slate-50 dark:bg-slate-800/40 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs text-slate-400">
+        <span>Navigation shortcut: <code class="font-mono bg-white dark:bg-slate-900 px-1.5 py-0.5 rounded border border-slate-200 dark:border-slate-700">Cmd+K</code> or <code class="font-mono bg-white dark:bg-slate-900 px-1.5 py-0.5 rounded border border-slate-200 dark:border-slate-700">Ctrl+K</code></span>
+        <span>Medo Medical Search</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- PUBLIC WEBSITE CONTAINER                  -->
+  <!-- ========================================== -->
+  <div id="public-container" class="flex flex-col min-h-screen">
+    <!-- Main Header -->
+    <header class="sticky top-0 z-30 bg-white/90 dark:bg-slate-950/90 backdrop-blur-md border-b border-slate-100 dark:border-slate-800 transition-colors">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+        
+        <!-- Brand Logo -->
+        <a href="/" class="flex items-center gap-2.5 group">
+          <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-teal-600 to-cyan-500 flex items-center justify-center text-white font-extrabold text-xl shadow-lg shadow-teal-500/25 group-hover:scale-105 transition transform">
+            <i data-lucide="stethoscope" class="w-5 h-5 text-white"></i>
+          </div>
+          <div class="flex flex-col">
+            <span class="font-extrabold text-xl tracking-tight text-slate-900 dark:text-white">
+              medo<span class="text-teal-600 dark:text-teal-400 font-bold text-sm ml-1 px-1.5 py-0.2 rounded-md bg-teal-50 dark:bg-teal-950/70 border border-teal-200 dark:border-teal-800">MBBS</span>
+            </span>
+            <span class="text-[10px] font-semibold uppercase tracking-widest text-slate-400 -mt-0.5">Medical Student Journal</span>
+          </div>
+        </a>
+
+        <!-- Desktop Navigation Links -->
+        <nav class="hidden md:flex items-center gap-7 text-sm font-medium text-slate-600 dark:text-slate-300">
+          <a href="/" class="nav-link hover:text-teal-600 dark:hover:text-teal-400 transition">Articles</a>
+          <a href="/notes" class="nav-link flex items-center gap-1.5 hover:text-teal-600 dark:hover:text-teal-400 transition">
+            <span class="w-2 h-2 rounded-full bg-teal-500 animate-pulse"></span>
+            Study Notes
+          </a>
+          <a href="/categories" class="nav-link hover:text-teal-600 dark:hover:text-teal-400 transition">Subjects</a>
+          <a href="/about" class="nav-link hover:text-teal-600 dark:hover:text-teal-400 transition">About Medo</a>
+          <a href="/contact" class="nav-link hover:text-teal-600 dark:hover:text-teal-400 transition">Contact</a>
+        </nav>
+
+        <!-- Right Controls: Search, Theme, Admin -->
+        <div class="flex items-center gap-3">
+          <!-- Search trigger -->
+          <button onclick="App.openSearchModal()" class="flex items-center gap-2 px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-medium text-slate-500 dark:text-slate-400 hover:border-teal-400 transition" title="Search (Cmd+K)">
+            <i data-lucide="search" class="w-4 h-4 text-teal-600"></i>
+            <span class="hidden sm:inline">Search...</span>
+            <span class="hidden sm:inline px-1.5 py-0.5 rounded bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-[10px] font-mono">⌘K</span>
+          </button>
+
+          <!-- Dark / Light Theme Toggle -->
+          <button onclick="App.toggleTheme()" class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:text-teal-600 transition" title="Toggle Theme">
+            <i data-lucide="moon" class="theme-toggle-icon w-4 h-4"></i>
+          </button>
+
+          <!-- Admin Nav Button container -->
+          <div id="admin-nav-button" class="hidden sm:block">
+            <a href="/admin/login" class="flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-medium rounded-full text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+              <i data-lucide="shield" class="w-3.5 h-3.5 text-slate-500"></i>
+              Admin
+            </a>
+          </div>
+
+          <!-- Mobile Hamburger Menu Button -->
+          <button onclick="document.getElementById('mobile-drawer').classList.toggle('hidden')" class="md:hidden p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300">
+            <i data-lucide="menu" class="w-5 h-5"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Mobile Navigation Drawer -->
+      <div id="mobile-drawer" class="hidden md:hidden border-t border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-950 p-4 space-y-2">
+        <a href="/" onclick="document.getElementById('mobile-drawer').classList.add('hidden')" class="block px-4 py-2.5 rounded-xl text-sm font-semibold hover:bg-slate-50 dark:hover:bg-slate-900">Articles</a>
+        <a href="/notes" onclick="document.getElementById('mobile-drawer').classList.add('hidden')" class="block px-4 py-2.5 rounded-xl text-sm font-semibold text-teal-600 dark:text-teal-400 bg-teal-50 dark:bg-teal-950/40">⚡ Study Notes</a>
+        <a href="/categories" onclick="document.getElementById('mobile-drawer').classList.add('hidden')" class="block px-4 py-2.5 rounded-xl text-sm font-semibold hover:bg-slate-50 dark:hover:bg-slate-900">Subjects</a>
+        <a href="/about" onclick="document.getElementById('mobile-drawer').classList.add('hidden')" class="block px-4 py-2.5 rounded-xl text-sm font-semibold hover:bg-slate-50 dark:hover:bg-slate-900">About Medo</a>
+        <a href="/contact" onclick="document.getElementById('mobile-drawer').classList.add('hidden')" class="block px-4 py-2.5 rounded-xl text-sm font-semibold hover:bg-slate-50 dark:hover:bg-slate-900">Contact Desk</a>
+        <a href="/admin" onclick="document.getElementById('mobile-drawer').classList.add('hidden')" class="block px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800">Admin Portal</a>
+      </div>
+    </header>
+
+    <!-- Main Public Content Area -->
+    <main id="main-content" class="flex-grow"></main>
+
+    <!-- Public Footer -->
+    <footer class="bg-white dark:bg-slate-950 border-t border-slate-100 dark:border-slate-800 transition-colors mt-auto">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
+          <!-- Col 1: Brand -->
+          <div class="md:col-span-2 space-y-4 max-w-sm">
+            <div class="flex items-center gap-2.5">
+              <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-teal-600 to-cyan-500 flex items-center justify-center text-white font-extrabold text-base">
+                <i data-lucide="stethoscope" class="w-4 h-4 text-white"></i>
+              </div>
+              <span class="font-extrabold text-lg tracking-tight text-slate-900 dark:text-white">
+                medo<span class="text-teal-600 dark:text-teal-400">MBBS</span>
+              </span>
+            </div>
+            <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
+              An independent medical student journal and high-yield study hub. Built by medical students, for clinicians in training. Covering pre-clinical foundations, ward survival, and university exam preparation.
+            </p>
+            <div class="flex items-center gap-4 text-slate-400 text-sm pt-2">
+              <a href="https://twitter.com" target="_blank" class="hover:text-teal-600 transition"><i data-lucide="twitter" class="w-4 h-4"></i></a>
+              <a href="https://github.com" target="_blank" class="hover:text-teal-600 transition"><i data-lucide="github" class="w-4 h-4"></i></a>
+              <a href="https://linkedin.com" target="_blank" class="hover:text-teal-600 transition"><i data-lucide="linkedin" class="w-4 h-4"></i></a>
+              <a href="mailto:editor@medo.com" class="hover:text-teal-600 transition"><i data-lucide="mail" class="w-4 h-4"></i></a>
+            </div>
+          </div>
+
+          <!-- Col 2: Navigation -->
+          <div>
+            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white mb-4">Medical Sections</h4>
+            <ul class="space-y-2.5 text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-medium">
+              <li><a href="/" class="hover:text-teal-600 transition">Clinical Articles</a></li>
+              <li><a href="/notes" class="hover:text-teal-600 transition">High-Yield Notes</a></li>
+              <li><a href="/categories" class="hover:text-teal-600 transition">MBBS Subject Directory</a></li>
+              <li><a href="/about" class="hover:text-teal-600 transition">About Dr. Anuja</a></li>
+              <li><a href="/contact" class="hover:text-teal-600 transition">Editorial & Submissions</a></li>
+            </ul>
+          </div>
+
+          <!-- Col 3: Portal -->
+          <div>
+            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white mb-4">Admin Suite</h4>
+            <ul class="space-y-2.5 text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-medium">
+              <li><a href="/admin/login" class="hover:text-teal-600 transition flex items-center gap-1.5"><i data-lucide="shield" class="w-3.5 h-3.5 text-teal-600"></i> Admin Sign In</a></li>
+              <li><a href="/admin" class="hover:text-teal-600 transition">Dashboard & Analytics</a></li>
+              <li><a href="/admin/notes" class="hover:text-teal-600 transition">Post Study Notes</a></li>
+              <li><a href="/admin/posts/new" class="hover:text-teal-600 transition">Compose Medical Blog</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="pt-8 border-t border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-400 gap-4">
+          <p>© 2026 Medo MBBS. Designed for medical scholars and future physicians.</p>
+          <div class="flex items-center gap-6">
+            <a href="/privacy" class="hover:text-teal-600">Privacy Policy</a>
+            <span>•</span>
+            <a href="/contact" class="hover:text-teal-600">Feedback Desk</a>
+            <span>•</span>
+            <span class="text-teal-500 font-mono flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-teal-500 animate-ping"></span> Clinical Portal Active</span>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- ADMIN CMS CONTAINER                        -->
+  <!-- ========================================== -->
+  <div id="admin-container" class="hidden min-h-screen flex flex-col bg-slate-50 dark:bg-slate-950 transition-colors">
+    <!-- Admin Top Navbar -->
+    <header class="bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800 sticky top-0 z-30">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <div class="flex items-center gap-4">
+          <a href="/admin" class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-teal-600 to-cyan-500 flex items-center justify-center text-white font-bold text-sm shadow-md">
+              <i data-lucide="stethoscope" class="w-4 h-4"></i>
+            </div>
+            <span class="font-extrabold text-base tracking-tight text-slate-900 dark:text-white">
+              medo<span class="text-teal-600 dark:text-teal-400">Admin</span>
+            </span>
+          </a>
+          <span class="hidden sm:inline px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-teal-50 text-teal-700 dark:bg-teal-950 dark:text-teal-300 border border-teal-200 dark:border-teal-800">
+            Medical CMS
+          </span>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <a href="/" target="_blank" class="p-2 rounded-xl text-slate-500 hover:text-teal-600 hover:bg-slate-100 dark:hover:bg-slate-800 transition" title="Open Public Website">
+            <i data-lucide="globe" class="w-4 h-4"></i>
+          </a>
+          <button onclick="App.toggleTheme()" class="p-2 rounded-xl text-slate-500 hover:text-teal-600 hover:bg-slate-100 dark:hover:bg-slate-800 transition" title="Toggle Theme">
+            <i data-lucide="moon" class="theme-toggle-icon w-4 h-4"></i>
+          </button>
+          <div class="h-4 w-px bg-slate-200 dark:bg-slate-700"></div>
+          <button onclick="AdminApp.handleLogout()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/30 transition">
+            <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
+            <span>Log Out</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Admin Body with Sidebar -->
+    <div class="flex-grow flex max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 gap-6">
+      <!-- Admin Sidebar -->
+      <aside class="hidden lg:block w-60 flex-shrink-0 space-y-1.5">
+        <button onclick="AdminApp.setTab('dashboard')" data-tab="dashboard" class="admin-nav-item w-full flex items-center gap-3 px-4 py-2.5 rounded-xl font-medium text-sm text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+          <i data-lucide="layout-dashboard" class="w-4 h-4"></i> Dashboard
+        </button>
+        
+        <!-- Medical Blogs Section -->
+        <div class="pt-2 pb-1 px-4 text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">Medical Blogs</div>
+        <button onclick="AdminApp.setTab('posts')" data-tab="posts" class="admin-nav-item w-full flex items-center gap-3 px-4 py-2.5 rounded-xl font-medium text-sm text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+          <i data-lucide="file-text" class="w-4 h-4"></i> All Blogs
+        </button>
+        <button onclick="AdminApp.openEditor(null)" data-tab="editor" class="admin-nav-item w-full flex items-center gap-3 px-4 py-2.5 rounded-xl font-medium text-sm text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+          <i data-lucide="edit-3" class="w-4 h-4"></i> Compose Blog
+        </button>
+
+        <!-- Study Notes Section -->
+        <div class="pt-3 pb-1 px-4 text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">Study Notes Hub</div>
+        <button onclick="AdminApp.setTab('notes')" data-tab="notes" class="admin-nav-item w-full flex items-center gap-3 px-4 py-2.5 rounded-xl font-medium text-sm text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+          <i data-lucide="book-open" class="w-4 h-4"></i> All Study Notes
+        </button>
+        <button onclick="AdminApp.openNoteEditor(null)" data-tab="note-editor" class="admin-nav-item w-full flex items-center gap-3 px-4 py-2.5 rounded-xl font-medium text-sm text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+          <i data-lucide="plus-circle" class="w-4 h-4"></i> Post New Note
+        </button>
+
+        <!-- Other Management -->
+        <div class="pt-3 pb-1 px-4 text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">Curriculum & Assets</div>
+        <button onclick="AdminApp.setTab('categories')" data-tab="categories" class="admin-nav-item w-full flex items-center gap-3 px-4 py-2.5 rounded-xl font-medium text-sm text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+          <i data-lucide="folder-tree" class="w-4 h-4"></i> Subjects & Topics
+        </button>
+        <button onclick="AdminApp.setTab('media')" data-tab="media" class="admin-nav-item w-full flex items-center gap-3 px-4 py-2.5 rounded-xl font-medium text-sm text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+          <i data-lucide="image" class="w-4 h-4"></i> Media Library
+        </button>
+        <button onclick="AdminApp.setTab('comments')" data-tab="comments" class="admin-nav-item w-full flex items-center gap-3 px-4 py-2.5 rounded-xl font-medium text-sm text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+          <i data-lucide="message-square" class="w-4 h-4"></i> Reader Comments
+        </button>
+        <button onclick="AdminApp.setTab('messages')" data-tab="messages" class="admin-nav-item w-full flex items-center gap-3 px-4 py-2.5 rounded-xl font-medium text-sm text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+          <i data-lucide="inbox" class="w-4 h-4"></i> Student Inquiries
+        </button>
+        <button onclick="AdminApp.setTab('settings')" data-tab="settings" class="admin-nav-item w-full flex items-center gap-3 px-4 py-2.5 rounded-xl font-medium text-sm text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+          <i data-lucide="shield" class="w-4 h-4"></i> Profile & Security
+        </button>
+      </aside>
+
+      <!-- Admin Dynamic Content -->
+      <main id="admin-content" class="flex-grow min-w-0"></main>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="/static/js/api.js"></script>
+  <script src="/static/js/app.js"></script>
+  <script src="/static/js/admin.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      App.init();
+      if (window.lucide) lucide.createIcons();
+    });
+  </script>
+</body>
+</html>

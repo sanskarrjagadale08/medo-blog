@@ -1,0 +1,2 @@
+# Medo uses Python 3 standard library (no heavy external dependencies required)
+# Ready for out-of-the-box cloud deployment

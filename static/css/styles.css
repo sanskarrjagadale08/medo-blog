@@ -1,0 +1,308 @@
+/* Medo — Modern MBBS Medical Student Design System */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --primary: #0d9488;
+  --primary-hover: #0f766e;
+  --primary-light: #f0fdfa;
+  --primary-dark: #115e59;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #334155;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Reading Progress Bar */
+#reading-progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #0d9488, #06b6d4, #3b82f6);
+  z-index: 100;
+  width: 0%;
+  transition: width 0.1s ease-out;
+}
+
+/* Markdown & Article Typography (.prose-medo and .prose-mdei) */
+.prose-medo, .prose-mdei {
+  max-width: 68ch;
+  margin-left: auto;
+  margin-right: auto;
+  color: #1e293b;
+  font-size: 1.125rem;
+  line-height: 1.85;
+}
+
+.dark .prose-medo, .dark .prose-mdei {
+  color: #e2e8f0;
+}
+
+.prose-medo h1, .prose-mdei h1 {
+  font-size: 2.25rem;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  color: #0f172a;
+}
+
+.dark .prose-medo h1, .dark .prose-mdei h1 {
+  color: #f8fafc;
+}
+
+.prose-medo h2, .prose-mdei h2 {
+  font-size: 1.625rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-top: 2.25rem;
+  margin-bottom: 0.85rem;
+  color: #0f172a;
+  border-bottom: 1px solid #f1f5f9;
+  padding-bottom: 0.5rem;
+}
+
+.dark .prose-medo h2, .dark .prose-mdei h2 {
+  color: #f8fafc;
+  border-color: #334155;
+}
+
+.prose-medo h3, .prose-mdei h3 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  margin-top: 1.75rem;
+  margin-bottom: 0.65rem;
+  color: #0f172a;
+}
+
+.dark .prose-medo h3, .dark .prose-mdei h3 {
+  color: #e2e8f0;
+}
+
+.prose-medo p, .prose-mdei p {
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
+  color: #334155;
+}
+
+.dark .prose-medo p, .dark .prose-mdei p {
+  color: #cbd5e1;
+}
+
+.prose-medo ul, .prose-medo ol, .prose-mdei ul, .prose-mdei ol {
+  margin-top: 1rem;
+  margin-bottom: 1.25rem;
+  padding-left: 1.5rem;
+}
+
+.prose-medo ul, .prose-mdei ul {
+  list-style-type: disc;
+}
+
+.prose-medo ol, .prose-mdei ol {
+  list-style-type: decimal;
+}
+
+.prose-medo li, .prose-mdei li {
+  margin-top: 0.4rem;
+  margin-bottom: 0.4rem;
+  color: #334155;
+}
+
+.dark .prose-medo li, .dark .prose-mdei li {
+  color: #cbd5e1;
+}
+
+.prose-medo blockquote, .prose-mdei blockquote {
+  border-left: 4px solid #0d9488;
+  padding-left: 1.25rem;
+  margin: 1.75rem 0;
+  font-style: italic;
+  color: #0f766e;
+  background: #f0fdfa;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+  border-radius: 0 0.5rem 0.5rem 0;
+}
+
+.dark .prose-medo blockquote, .dark .prose-mdei blockquote {
+  background: #042f2e/50;
+  color: #5eead4;
+  border-left-color: #2dd4bf;
+}
+
+.prose-medo hr, .prose-mdei hr {
+  margin: 2.5rem 0;
+  border: 0;
+  border-top: 1px solid #e2e8f0;
+}
+
+.dark .prose-medo hr, .dark .prose-mdei hr {
+  border-color: #334155;
+}
+
+.prose-medo code:not(pre code), .prose-mdei code:not(pre code) {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background-color: #f1f5f9;
+  color: #0d9488;
+  padding: 0.2em 0.4em;
+  border-radius: 0.35rem;
+  font-weight: 600;
+}
+
+.dark .prose-medo code:not(pre code), .dark .prose-mdei code:not(pre code) {
+  background-color: #1e293b;
+  color: #5eead4;
+}
+
+.prose-medo pre, .prose-mdei pre {
+  margin: 1.75rem 0;
+  border-radius: 0.75rem;
+  background-color: #0f172a !important;
+  padding: 1.25rem;
+  overflow-x: auto;
+  border: 1px solid #1e293b;
+}
+
+.prose-medo pre code, .prose-mdei pre code {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  background: transparent !important;
+  padding: 0 !important;
+  color: #f8fafc;
+}
+
+.prose-medo table, .prose-mdei table {
+  width: 100%;
+  margin: 1.75rem 0;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.prose-medo th, .prose-mdei th {
+  background-color: #f0fdfa;
+  border-bottom: 2px solid #ccfbf1;
+  padding: 0.75rem 1rem;
+  text-align: left;
+  font-weight: 700;
+  color: #0f766e;
+}
+
+.dark .prose-medo th, .dark .prose-mdei th {
+  background-color: #042f2e/60;
+  border-color: #115e59;
+  color: #5eead4;
+}
+
+.prose-medo td, .prose-mdei td {
+  border-bottom: 1px solid #f1f5f9;
+  padding: 0.75rem 1rem;
+  color: #334155;
+}
+
+.dark .prose-medo td, .dark .prose-mdei td {
+  border-color: #1e293b;
+  color: #cbd5e1;
+}
+
+.prose-medo img, .prose-mdei img {
+  border-radius: 0.75rem;
+  margin: 2rem auto;
+  max-width: 100%;
+  height: auto;
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.08);
+}
+
+.prose-medo a, .prose-mdei a {
+  color: #0d9488;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  font-weight: 500;
+  transition: color 0.15s ease;
+}
+
+.prose-medo a:hover, .prose-mdei a:hover {
+  color: #0f766e;
+}
+
+.dark .prose-medo a, .dark .prose-mdei a {
+  color: #2dd4bf;
+}
+
+.dark .prose-medo a:hover, .dark .prose-mdei a:hover {
+  color: #5eead4;
+}
+
+/* Toast Notifications */
+#toast-container {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  pointer-events: none;
+}
+
+.toast {
+  pointer-events: auto;
+  transform: translateY(100%);
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.toast.show {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+/* Smooth transitions */
+.transition-smooth {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
